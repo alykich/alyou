@@ -1,16 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<!--PWA-START-->
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#DB7F00">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="AlYou">
-<script>/* PWA: работа без интернета (только когда открыто с сайта, не из файла) */
-if("serviceWorker" in navigator&&location.protocol!=="file:")window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
-<!--PWA-END-->
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}/*I18N-CSS*/
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}/*I18N-CSS*/
 #langBox{position:absolute;left:0;top:0;z-index:5;text-align:left}
 #langBtn{display:flex;align-items:center;gap:4px;padding:7px 11px;border:1px solid #e6d3b8;border-radius:999px;background:#fff;color:#b4610a;font-family:"Montserrat","Avenir Next",sans-serif;font-weight:700;font-size:12px;line-height:1;cursor:pointer}
 #langBtn .ar{font-size:9px;transition:transform .2s}
@@ -943,7 +931,7 @@ if(typeof SAMPLES==="undefined")window.SAMPLES=[];</script>
 const NOTES=[["До",261.63,0],["До♯",277.18,1],["Ре",293.66,0],["Ре♯",311.13,1],["Ми",329.63,0],["Фа",349.23,0],["Фа♯",369.99,1],["Соль",392.0,0],["Соль♯",415.3,1],["Ля",440.0,0],["Ля♯",466.16,1],["Си",493.88,0],["До",523.25,0]];
 const LEVELS=[2,3,4,5];
 const KEY="ear-trainer-v1";
-let st={streak:0,best:0,correct:0,total:0,level:1,vol:1};
+let st={streak:0,best:0,correct:0,total:0,level:0,vol:1};
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==="object")st=Object.assign(st,s)}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
 
@@ -1049,12 +1037,10 @@ LEVELS.forEach((n,i)=>{
   const b=document.createElement("button");b.className="lv";b.textContent=n+" ноты".replace("5 ноты","5 нот");
   b.textContent=n+(n===5?" нот":" ноты");
   b.onclick=()=>{st.level=i;save();render();newRound(false)};
-  if(n===2)b.style.display="none"; /* «2 ноты» убраны: это угадывание интервалов, оно есть в разделе «Интервалы» */
   $("levels").appendChild(b);
 });
-if(st.level===0){st.level=1;save()} /* у кого были выбраны «2 ноты» — переключаем на «3 ноты» */
 /* кнопка «Мелодия» (st.level=4) */
-(()=>{const b=document.createElement("button");b.className="lv";b.textContent="Мелодия";b.style.flex="0 0 calc((100% - 12px) / 3)";
+(()=>{const b=document.createElement("button");b.className="lv";b.textContent="Мелодия";b.style.flex="0 0 calc((100% - 18px) / 4)";
   b.onclick=()=>{st.level=4;save();render();newRound(false)};$("levelsM").appendChild(b)})();
 /* ===== Мелодии по паттернам ступеней («5 нот» и «Мелодия») =====
    Паттерн — список ступеней гаммы. Тональность выбирается случайно:
